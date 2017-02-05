@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<form role="form" class="form-horizontal" method="POST">
+    <div class="form-group">
+        <label for="inputGameName" class="col-sm-2 control-label">Game</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputGameName">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputSummary" class="col-sm-2 control-label">Summary</label>
+        <div class="col-sm-10">
+            <input type="text" 
+            class="form-control" 
+            id="inputSummary"
+            placeholder="One line summary text to display to readers">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputReview" class="col-sm-2 control-label">Review</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" rows="12"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputRating" class="col-sm-2 control-label">Rating</label>
+        <div class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadioOptions"
+            value="option1">1
+        </div>
+        <div class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadioOptions"
+            value="option2">2
+        </div>
+        <div class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadioOptions"
+            value="option3">3
+        </div>
+        <div class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadioOptions"
+            value="option4">4
+        </div>
+        <div class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadioOptions"
+            value="option5">5
+        </div>
+    </div>
+    <div class="row text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-default">Cancel</button>
+    </div>
+</form>
+{% endblock %}

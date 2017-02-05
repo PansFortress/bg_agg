@@ -3,4 +3,4 @@ from . import app
 
 @app.route("/")
 def default():
-    return render_template("product.html")
+    return render_template("review_form.html")
