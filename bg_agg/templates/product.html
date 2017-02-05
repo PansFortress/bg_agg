@@ -1,6 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2 class="title">Title</h2>
-    <p class="supporting-detail">Publisher</p>
-    <p class="supporting-detail">Date</p>
+<div class="row">
+   <div class="col-sm-3 thumbnail">
+      <img src="../static/imgs/catan_profile.jpg" width=171 height=180>
+   </div>
+   <div class="col-sm-3">
+      <div class="rating-block">
+         <h4>Average Critic Rating</h4>
+         <h2 class="bold padding-bottom-7">3.0 <small>/ 5</small></h2>
+         <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+      </div>
+   </div>
+   <div class="col-sm-3">
+      <div class="rating-block">
+         <h4>Average user rating</h4>
+         <h2 class="bold padding-bottom-7">1.1 <small>/ 5</small></h2>
+         <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+         <button type="button" class="btn btn-default btn-grey btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+         </button>
+      </div>
+   </div>
+   <div class="col-sm-3" style="border: solid 1px; height: 100px">
+       <p>Advertising</p>
+   </div>
+   <div class="col-sm-6">
+        <p class="small top-margin-please"><b>Summary: </b>Nam a quam semper, tempor turpis eu, commodo turpis. Nunc tincidunt pulvinar nunc eu auctor. Praesent luctus, tellus et maximus faucibus, enim felis semper ex, eget rutrum dui ex ac ipsum. Proin mollis urna lorem, scelerisque maximus odio molestie at. Morbi faucibus lacus a erat convallis, et blandit ligula cursus. Donec ac facilisis risus. Proin rhoncus erat a elementum sollicitudin. Donec maximus mollis sapien, vitae porta sem finibus a. Donec imperdiet dapibus magna, a porta neque tempus ornare. Aliquam sagittis est in odio feugiat tristique.</p>
+   </div>
+</div>
 {% endblock %}
