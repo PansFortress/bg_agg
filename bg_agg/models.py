@@ -9,6 +9,7 @@ class Review(Base):
     id = Column(Integer, primary_key=True)
     raw_score = Column(String(150))
     score = Column(Float)
+    summary = Column(String(150))
     review = Column(String(1500))
     source = Column(String)
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
@@ -30,5 +31,3 @@ class Reviewer(Base):
     display_name = Column(String(150))
     critic = Column(Boolean)
     reviews = relationship("Review", backref="reviewer")
-
-Base.metadata.create_all(engine)
