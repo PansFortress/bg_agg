@@ -30,3 +30,5 @@ class Reviewer(Base):
     display_name = Column(String(150))
     critic = Column(Boolean)
     reviews = relationship("Review", backref="reviewer")
+
+Base.metadata.create_all(engine)
