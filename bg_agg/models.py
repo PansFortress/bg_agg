@@ -8,9 +8,9 @@ class Review(Base):
     __tablename__ = "reviews"
     id = Column(Integer, primary_key=True)
     raw_score = Column(String(150))
-    score = Column(Float)
-    summary = Column(String(150))
-    review = Column(String(1500))
+    score = Column(Float, nullable=False)
+    summary = Column(String(150), nullable=False)
+    review = Column(String(1500), nullable=False)
     source = Column(String)
     product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
     reviewer_id = Column(Integer, ForeignKey('reviewers.id'), nullable=False)
@@ -18,7 +18,7 @@ class Review(Base):
 class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True)
-    name = Column(String(150))
+    name = Column(String(150), nullable=False)
     publisher = Column(String(150))
     release = Column(String(150))
     player_num = Column(String(150))
@@ -28,6 +28,6 @@ class Product(Base):
 class Reviewer(Base):
     __tablename__ = "reviewers"
     id = Column(Integer, primary_key=True)
-    display_name = Column(String(150))
+    display_name = Column(String(150), nullable=False)
     critic = Column(Boolean)
     reviews = relationship("Review", backref="reviewer")
