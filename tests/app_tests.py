@@ -1,5 +1,6 @@
 import unittest
 import os
+import requests
 
 os.environ["CONFIG_PATH"] = "bg_agg.config.TestingConfig"
 
@@ -54,3 +55,19 @@ class TestApp(unittest.TestCase):
 
         # TODO(?) May want to add to this test to make sure the data being put in is the data that
         # comes out and validate that nothing funky or unexpected happen
+
+class TestBGGIntegration(unittest.TestCase):
+    def setUp(self):
+      pass
+    def tearDown(self):
+      pass
+
+    def test_bgg_topgames_endpoint(self):
+      r = requests.get("https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame")
+
+      self.assertEqual(r.status_code, 200)
+
+    def test_bgg_gameid_endpoint(self):
+      r = requests.get("https://www.boardgamegeek.com/xmlapi2/thing?id=1")
+
+      self.assertEqual(r.status_code, 200)
