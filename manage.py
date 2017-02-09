@@ -32,7 +32,7 @@ def gettopfifty():
         root = ET.fromstring(r.text)
         createProducts(root)
 
-        products = session.query(Product).filter(Product.name == None).limit(2).all()
+        products = session.query(Product).filter(Product.name == None).all()
         for product in products:
             try:
                 time.sleep(1)
@@ -42,6 +42,7 @@ def gettopfifty():
 
                 root = ET.fromstring(r.text)
                 populateProduct(product, root)
+                populateReviews(product, root)
 
             except requests.exceptions.RequestException as e:
                 print("Sleeping for 60 seconds due to {}".format(e))
@@ -60,21 +61,19 @@ def createProducts(root):
 
 def populateProduct(product, root):
     for item in root.iter('description'):
-        # print(item.text)
-        pass
+        product.desc = item.text
     for item in root.iter('name'):
         if(item.attrib["type"] == "primary"):
-            # print(item.attrib["value"])
-            pass
+            product.name = item.attrib["value"]
 
     first=True
     for item in root.iter('link'):
         if(item.attrib["type"] == "boardgamepublisher" and first):
-            # print(item.attrib["value"])
+            product.publisher = item.attrib["value"]
             first = False
 
     for item in root.iter('yearpublished'):
-        # print(item.attrib["value"])
+        product.release = item.attrib["value"]
         pass
 
     players = ''
@@ -83,10 +82,49 @@ def populateProduct(product, root):
         players += " - "
     for item in root.iter('maxplayers'):
         players += item.attrib["value"]
-    # print(players)
+    product.player_num = players
 
     for item in root.iter('image'):
-        print("http:{}".format(item.text))
+        product.image = "http:{}".format(item.text)
+    
+    session.commit()
+
+def populateReviews(product, root):
+    for item in root.iter('comment'):
+        if item.attrib["rating"] != "N/A":
+            user = getUser(item.attrib["username"])
+
+            review = session.query(Review).filter(Review.reviewer == user).filter(Review.product == product).first()
+            if review is None:
+                review = Review(raw_score=item.attrib["rating"],
+                                score=tenToScore(item.attrib["rating"]),
+                                summary=item.attrib["value"][:140],
+                                review=item.attrib["value"][:1500],
+                                source="https://boardgamegeek.com/boardgame/{}/{}/ratings".\
+                                format(product.e_id, product.name),
+                                product=product,
+                                reviewer=user)
+                session.add(review)
+                session.commit()
+
+def getUser(username):
+    user = session.query(Reviewer).filter(Reviewer.display_name == username).first()
+    if user:
+        return user
+    else:
+        user = Reviewer(display_name=username, critic=False)
+        session.add(user)
+        session.commit()
+        return user
+
+def tenToScore(val):
+    return float(val)/2
+
+def textToScore(val):
+    if val == "buy":
+        return 4.0
+    else:
+        return 2.0
 
 if __name__ == "__main__":
     manager.run()
