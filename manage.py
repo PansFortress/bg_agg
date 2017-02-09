@@ -27,17 +27,28 @@ def gettopfifty():
         r = requests.get("https://www.boardgamegeek.com/xmlapi2/hot?type=boardgame")
 
         if not r.status_code == 200:
-            return "Error: Unexpected response".format(r)
+            return "Error: Unexpected response {}".format(r)
 
         tree = ET.fromstring(r.text)
 
-        topfifty_ids = []
+        # topfifty_ids = []
+        count = 0
         for child in tree:
-            r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}".format(child.attrib["id"]))
-            if not r.status_code == 200:
-                return "Error: Unexpected response".format(r)
+            try: 
+                time.sleep(1)
+                r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(child.attrib["id"]))
+                if not r.status_code == 200:
+                    return "Error: Unexpected response {}".format(r)
 
-            print(child)
+                child_tree = ET.fromstring(r.text)
+                count += 1
+                for item in child_tree:
+                    for i in item:
+                        if i.tag == "name" and i.attrib["type"] == "primary":
+                            print(str(count) + " : " + i.attrib["value"])
+            except requests.exceptions.RequestException as e:
+                print("Sleeping for 60 seconds due to {}".format(e))
+                time.sleep(60)
 
             # _tree = ET.fromstring(r.text)
             # for item in _tree:
