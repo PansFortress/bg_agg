@@ -29,37 +29,64 @@ def gettopfifty():
         if not r.status_code == 200:
             return "Error: Unexpected response {}".format(r)
 
-        tree = ET.fromstring(r.text)
+        root = ET.fromstring(r.text)
+        createProducts(root)
 
-        # topfifty_ids = []
-        count = 0
-        for child in tree:
-            try: 
+        products = session.query(Product).filter(Product.name == None).limit(2).all()
+        for product in products:
+            try:
                 time.sleep(1)
-                r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(child.attrib["id"]))
+                r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(product.e_id))
                 if not r.status_code == 200:
-                    return "Error: Unexpected response {}".format(r)
+                    return "Error: Unexected response with {}".format(r)
 
-                child_tree = ET.fromstring(r.text)
-                count += 1
-                for item in child_tree:
-                    for i in item:
-                        if i.tag == "name" and i.attrib["type"] == "primary":
-                            print(str(count) + " : " + i.attrib["value"])
+                root = ET.fromstring(r.text)
+                populateProduct(product, root)
+
             except requests.exceptions.RequestException as e:
                 print("Sleeping for 60 seconds due to {}".format(e))
                 time.sleep(60)
-
-            # _tree = ET.fromstring(r.text)
-            # for item in _tree:
-            #     for i in item:
-            #         time.sleep(1)
-            #         if i.tag == "name" and i.attrib["type"] == "primary":
-            #             print(i.attrib["value"])
-        
-
+    
     except requests.exceptions.RequestException as e:
         return "Error: {}".format(e)
+
+def createProducts(root):
+    for item in root.iter('item'):
+        product = session.query(Product).filter(Product.e_id == item.attrib["id"]).first()
+        if not product:
+            product = Product(e_id = item.attrib["id"])
+            session.add(product)
+            session.commit()
+
+def populateProduct(product, root):
+    for item in root.iter('description'):
+        # print(item.text)
+        pass
+    for item in root.iter('name'):
+        if(item.attrib["type"] == "primary"):
+            # print(item.attrib["value"])
+            pass
+
+    first=True
+    for item in root.iter('link'):
+        if(item.attrib["type"] == "boardgamepublisher" and first):
+            # print(item.attrib["value"])
+            first = False
+
+    for item in root.iter('yearpublished'):
+        # print(item.attrib["value"])
+        pass
+
+    players = ''
+    for item in root.iter('minplayers'):
+        players += item.attrib["value"]
+        players += " - "
+    for item in root.iter('maxplayers'):
+        players += item.attrib["value"]
+    # print(players)
+
+    for item in root.iter('image'):
+        print("http:{}".format(item.text))
 
 if __name__ == "__main__":
     manager.run()

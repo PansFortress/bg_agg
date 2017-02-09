@@ -18,11 +18,13 @@ class Review(Base):
 class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True)
-    name = Column(String(150), nullable=False)
+    e_id = Column(Integer)
+    name = Column(String(150))
     publisher = Column(String(150))
     release = Column(String(150))
     player_num = Column(String(150))
     image = Column(String)
+    desc = Column(String)
     reviews = relationship("Review", backref="product")
 
 class Reviewer(Base):
