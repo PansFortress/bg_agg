@@ -6,6 +6,8 @@ from bg_agg import app
 from bg_agg.database import Base, session
 from bg_agg.models import Review, Product, Reviewer
 
+# TODO: Need to add logging to the seeding process to confirm where we fail
+
 manager = Manager(app)
 
 @manager.command
@@ -31,30 +33,36 @@ def gettopfifty():
 
         root = ET.fromstring(r.text)
         createProducts(root)
-
-        products = session.query(Product).filter(Product.name == None).all()
-        for product in products:
-            try:
-                time.sleep(1)
-                r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(product.e_id))
-                if not r.status_code == 200:
-                    return "Error: Unexected response with {}".format(r)
-
-                root = ET.fromstring(r.text)
-                populateProduct(product, root)
-                populateReviews(product, root)
-
-            except requests.exceptions.RequestException as e:
-                print("Sleeping for 60 seconds due to {}".format(e))
-                time.sleep(60)
     
     except requests.exceptions.RequestException as e:
         return "Error: {}".format(e)
 
+@manager.command
+def seedmissing():
+    products = session.query(Product).filter(Product.name == None).all()
+    for product in products:
+        try:
+            time.sleep(1)
+            r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(product.e_id))
+            if not r.status_code == 200:
+                return "Error: Unexected response with {}".format(r)
+
+            root = ET.fromstring(r.text)
+            populateProduct(product, root)
+            populateReviews(product, root)
+
+        except requests.exceptions.RequestException as e:
+            print("Sleeping for 60 seconds due to {}".format(e))
+            time.sleep(60)
+        except ET.ParseError:
+            print("{} is corrupt".format(r.text))
+
 def createProducts(root):
     for item in root.iter('item'):
         product = session.query(Product).filter(Product.e_id == item.attrib["id"]).first()
-        if not product:
+        # Blacklist 193738 due to encoding issues with XML data back. BGG API sent back
+        # 200 status_code while reporting an error in messaging for this
+        if not product and item.attrib["id"] != "193738":
             product = Product(e_id = item.attrib["id"])
             session.add(product)
             session.commit()
