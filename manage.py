@@ -2,6 +2,7 @@ import os, requests
 import xml.etree.ElementTree as ET
 import time
 from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 from bg_agg import app
 from bg_agg.database import Base, session
 from bg_agg.models import Review, Product, Reviewer
@@ -128,6 +129,13 @@ def textToScore(val):
         return 4.0
     else:
         return 2.0
+
+class DB(object):
+    def __init__(self, metadata):
+        self.metadata = metadata
+
+migrate = Migrate(app, DB(Base.metadata))
+manager.add_command('db', MigrateCommand)
 
 if __name__ == "__main__":
     manager.run()
