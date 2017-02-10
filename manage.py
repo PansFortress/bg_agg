@@ -11,11 +11,6 @@ from bg_agg.models import Review, Product, Reviewer
 manager = Manager(app)
 
 @manager.command
-def run():
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port, debug=True)
-
-@manager.command
 def addreviewer():
     display_name = input("Display Name: ")
     critic = False
