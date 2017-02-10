@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
+from flask_login import UserMixin
 from bg_agg import app
 from .database import Base, engine, session
 
@@ -27,12 +28,10 @@ class Product(Base):
     desc = Column(String)
     reviews = relationship("Review", backref="product")
 
-class Reviewer(Base):
+class Reviewer(Base, UserMixin):
     __tablename__ = "reviewers"
     id = Column(Integer, primary_key=True)
     display_name = Column(String(150), nullable=False)
     critic = Column(Boolean)
     reviews = relationship("Review", backref="reviewer")
     password = Column(String(128))
-
-Base.metadata.create_all(engine)
