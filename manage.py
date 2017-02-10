@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import time
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
+from werkzeug.security import generate_password_hash
 from bg_agg import app
 from bg_agg.database import Base, session
 from bg_agg.models import Review, Product, Reviewer
@@ -52,6 +53,13 @@ def seedmissing():
             time.sleep(60)
         except ET.ParseError:
             print("{} is corrupt".format(r.text))
+
+@manager.command
+def seedPasswords(defaultPassword):
+    users = session.query(Reviewer).filter(Reviewer.password == None).all()
+    for user in users:
+        user.password = generate_password_hash(defaultPassword)
+    session.commit()
 
 def createProducts(root):
     for item in root.iter('item'):
@@ -116,7 +124,8 @@ def getUser(username):
     if user:
         return user
     else:
-        user = Reviewer(display_name=username, critic=False)
+        user = Reviewer(display_name=username, 
+                        critic=False)
         session.add(user)
         session.commit()
         return user
