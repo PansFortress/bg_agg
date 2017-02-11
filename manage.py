@@ -73,6 +73,7 @@ def createProducts(root):
             session.add(product)
             session.commit()
 
+#TODO: Make a function to check for first instance of a key in the tree
 def populateProduct(product, root):
     for item in root.iter('description'):
         product.description = item.text
@@ -80,11 +81,9 @@ def populateProduct(product, root):
         if(item.attrib["type"] == "primary"):
             product.name = item.attrib["value"]
 
-    first=True
     for item in root.iter('link'):
-        if(item.attrib["type"] == "boardgamepublisher" and first):
+        if(item.attrib["type"] == "boardgamepublisher" and not product.publisher):
             product.publisher = item.attrib["value"]
-            first = False
 
     for item in root.iter('yearpublished'):
         product.release = item.attrib["value"]

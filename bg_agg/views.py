@@ -18,7 +18,15 @@ def game_get(game_id):
     # Review = models.Review
     # critic_score = session.query(func.sum(Review.score)).filter(product=product)
     Review = models.Review
+    Reviewer = models.Reviewer
+
     reviews = session.query(Review).filter(Review.product == product)
+
+    # result = session.query(Review, Reviewer).filter(Review.product==product).\
+    #          filter_by(Review.reviewer_id == Reviewer.id)
+
+    # for item in result:
+    #     print(item)
 
     # Need to somehow pass relevant Reviewer information
 
