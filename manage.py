@@ -38,7 +38,7 @@ def gettopfifty():
 
 @manager.command
 def seedmissing():
-    products = session.query(Product).filter(Product.name == None).all()
+    products = session.query(Product).filter(Product.description == None).all()
     for product in products:
         try:
             time.sleep(1)
@@ -75,7 +75,7 @@ def createProducts(root):
 
 def populateProduct(product, root):
     for item in root.iter('description'):
-        product.desc = item.text
+        product.description = item.text
     for item in root.iter('name'):
         if(item.attrib["type"] == "primary"):
             product.name = item.attrib["value"]

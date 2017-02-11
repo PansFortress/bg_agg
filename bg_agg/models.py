@@ -25,7 +25,7 @@ class Product(Base):
     release = Column(String(150))
     player_num = Column(String(150))
     image = Column(String)
-    desc = Column(String)
+    description = Column(String)
     reviews = relationship("Review", backref="product")
 
 class Reviewer(Base, UserMixin):
