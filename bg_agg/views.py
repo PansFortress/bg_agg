@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for, render_template, flash
-from flask_login import login_user
+from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security  import check_password_hash
 from . import app, models
 from .database import Base, engine, session
@@ -9,12 +9,36 @@ def default():
     return render_template("product.html")
 
 @app.route("/game/<int:game_id>/form", methods=["GET"])
+@login_required
 def form_get(game_id):
     Product = models.Product
     product = session.query(Product).filter(Product.id==game_id).first()
     if product:
         return render_template("review_form.html", product=product)
     return render_template("404.html"),404
+
+# Question: Is there any way to pass product from the GET request back to the
+# POST request so we don't have to make a second query to the db?
+@app.route("/game/<int:game_id>/form", methods=["POST"])
+@login_required
+def form_post(game_id):
+    Product = models.Product
+    product = session.query(Product).filter(Product.id==game_id).first()
+    
+    review = models.Review(raw_score=request.form["radioScore"],
+                           score=request.form["radioScore"],
+                           summary=request.form["inputSummary"],
+                           review=request.form["inputReview"],
+                           product=product,
+                           reviewer=current_user)
+
+    session.add(review)
+    session.commit()
+
+    flash("Your review's been submitted. Thanks so much!", "success")
+
+    return(redirect(url_for("default")))
+
 
 @app.route("/login", methods=["GET"])
 def login_get():
@@ -32,7 +56,7 @@ def login_post():
         return redirect(url_for("login_get"))
 
     login_user(user)
-    return redirect(request.args.get('next') or url_for("default"))
+    return redirect(request.args.get('next') or url_for("form_get", game_id=1))
 
 # TODO: OATH
 # TODO: Password reset, email notification, whole infrastructure

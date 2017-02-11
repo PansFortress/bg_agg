@@ -15,8 +15,10 @@ manager = Manager(app)
 @manager.command
 def addreviewer():
     display_name = input("Display Name: ")
-    critic = False
-    reviewer = Reviewer(display_name=display_name, critic=critic)
+    critic = True
+    password = input("Password: ")
+    reviewer = Reviewer(display_name=display_name, critic=critic,
+                        password=generate_password_hash(password))
     session.add(reviewer)
     session.commit()
     
