@@ -12,3 +12,14 @@
     color:white;
     text-align: center;
 }
+
+.bad-review{
+    background-color:#B5543F;
+    color:white;
+    text-align: center;
+}
+
+.review-scroll{
+    height: 900px;
+    overflow-x: scroll;
+}

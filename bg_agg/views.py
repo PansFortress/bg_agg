@@ -6,7 +6,25 @@ from .database import Base, engine, session
 
 @app.route("/")
 def default():
-    return render_template("product.html")
+    return render_template("product_mockup.html")
+
+@app.route("/game/<int:game_id>", methods=["GET"])
+def game_get(game_id):
+    Product = models.Product
+    product = session.query(Product).filter(Product.id==game_id).first()
+
+    # TODO Need to investigate how to 1) Use SQLAlchemy to SUM a column up
+    # 2) join on Reviewers who are Critics
+    # Review = models.Review
+    # critic_score = session.query(func.sum(Review.score)).filter(product=product)
+    Review = models.Review
+    reviews = session.query(Review).filter(Review.product == product)
+
+    # Need to somehow pass relevant Reviewer information
+
+    if product:
+        return render_template("product.html", product=product, reviews=reviews)
+    return render_template("404.html"),404
 
 @app.route("/game/<int:game_id>/form", methods=["GET"])
 @login_required

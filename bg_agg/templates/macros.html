@@ -1,0 +1,19 @@
+{% macro review_stars(val) %}
+    <h2 class="bold padding-bottom-7">{{ val }}<small>/ 5</small></h2>
+    
+    {% for n in range(val|int) %}
+    <button type="button" class="btn btn-warning btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+    </button>
+    {% endfor %}
+
+    {% for n in range(5 - val|int) %}
+    <button type="button" class="btn btn-grey btn-sm" aria-label="Left Align">
+         <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+    </button>
+    {% endfor %}
+{% endmacro %}
+
+{% macro shorten(val) %}
+    {{val[0:1500]|safe}}
+{% endmacro %}
