@@ -18,7 +18,7 @@ class Review(Base):
 class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True)
-    e_id = Column(Integer)
+    e_id = Column(Integer, nullable=False, unique=True)
     name = Column(String(150))
     publisher = Column(String(150))
     release = Column(String(150))
@@ -34,5 +34,3 @@ class Reviewer(Base):
     critic = Column(Boolean)
     reviews = relationship("Review", backref="reviewer")
     password = Column(String(128))
-
-Base.metadata.create_all(engine)

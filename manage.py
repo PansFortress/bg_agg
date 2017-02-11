@@ -86,12 +86,13 @@ def populateProduct(product, root):
 
     for item in root.iter('yearpublished'):
         product.release = item.attrib["value"]
-        pass
 
+    # Only expect to iterate over each loop once as we only expect one minplayers and
+    # one maxplayers returned in the XML document
     players = ''
     for item in root.iter('minplayers'):
         players += item.attrib["value"]
-        players += " - "
+    players += " - "
     for item in root.iter('maxplayers'):
         players += item.attrib["value"]
     product.player_num = players
@@ -100,6 +101,9 @@ def populateProduct(product, root):
         product.image = "http:{}".format(item.text)
     
     session.commit()
+
+def tenToScore(val):
+    return float(val)/2
 
 def populateReviews(product, root):
     for item in root.iter('comment'):
@@ -123,15 +127,14 @@ def getUser(username):
     user = session.query(Reviewer).filter(Reviewer.display_name == username).first()
     if user:
         return user
-    else:
-        user = Reviewer(display_name=username, 
-                        critic=False)
-        session.add(user)
-        session.commit()
-        return user
 
-def tenToScore(val):
-    return float(val)/2
+    user = Reviewer(display_name=username, 
+                    critic=False,
+                    password='')
+    session.add(user)
+    session.commit()
+    return user
+
 
 def textToScore(val):
     if val == "buy":

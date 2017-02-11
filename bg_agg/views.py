@@ -13,3 +13,6 @@ def form(game_id):
     if product:
         return render_template("review_form.html", product=product)
     return render_template("404.html"),404
+
+# TODO: OATH
+# TODO: Password reset, email notification, whole infrastructure
