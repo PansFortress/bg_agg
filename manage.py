@@ -56,7 +56,7 @@ def seedmissing():
 
 @manager.command
 def seedPasswords(defaultPassword):
-    users = session.query(Reviewer).filter(Reviewer.password == None).all()
+    users = session.query(Reviewer).filter(Reviewer.password == '').all()
     for user in users:
         user.password = generate_password_hash(defaultPassword)
     session.commit()

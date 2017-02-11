@@ -1,7 +1,8 @@
 from flask_login import LoginManager
 
 from . import app
-from .database import session, Reviewer
+from .database import session
+from .models import Reviewer
 
 login_manager = LoginManager()
 login_manager.init_app(app)

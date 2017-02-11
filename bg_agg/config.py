@@ -1,4 +1,5 @@
 import os
+
 class DevelopmentConfig(object):
     DATABASE_URI = "postgresql:///bg_agg"
     DEBUG = True
