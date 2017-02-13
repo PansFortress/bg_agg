@@ -1,6 +1,7 @@
 from flask import request, redirect, url_for, render_template, flash
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security  import check_password_hash
+from sqlalchemy import func
 from . import app, models
 from .database import Base, engine, session
 
@@ -15,22 +16,32 @@ def game_get(game_id):
 
     # TODO Need to investigate how to 1) Use SQLAlchemy to SUM a column up
     # 2) join on Reviewers who are Critics
-    # Review = models.Review
-    # critic_score = session.query(func.sum(Review.score)).filter(product=product)
     Review = models.Review
     Reviewer = models.Reviewer
 
-    reviews = session.query(Review).filter(Review.product == product)
+    critic_reviews = session.query(Review).join(Review.reviewer).\
+             filter(Review.product == product).\
+             filter(Reviewer.critic == True).\
+             values(Reviewer.critic,
+                    Reviewer.display_name,
+                    Review.raw_score,
+                    Review.score,
+                    Review.review,
+                    Review.source)
 
-    # result = session.query(Review, Reviewer).filter(Review.product==product).join(Review.reviewer_id == Reviewer.id)
-
-    # for item in result:
-    #     print(item)
-
-    # Need to somehow pass relevant Reviewer information
+    reviews = session.query(Review).join(Review.reviewer).\
+             filter(Review.product == product).\
+             filter(Reviewer.critic == False).\
+             values(Reviewer.critic,
+                    Reviewer.display_name,
+                    Review.raw_score,
+                    Review.score,
+                    Review.review,
+                    Review.source)
 
     if product:
-        return render_template("product.html", product=product, reviews=reviews)
+        return render_template("product.html", product=product, 
+                                critic_reviews=critic_reviews,reviews=reviews)
     return render_template("404.html"),404
 
 @app.route("/game/<int:game_id>/form", methods=["GET"])

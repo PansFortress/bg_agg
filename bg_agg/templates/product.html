@@ -38,17 +38,40 @@
 {#     <div class="col-sm-3">
     </div> #}
     <div class="col-sm-9">
-        <p class="small top-margin-please"><b>Summary: </b>{{shorten(product.description)}}</p>
+        <p class="small top-margin-please"><b>Summary: </b>{{shorten(product.description, 1500)}}</p>
     </div>
 </div>
+    
+    <div class="col-sm-6 review-scroll top-margin-please">
+        {% for review in critic_reviews %}
+            <article class="row">
+                {% if review.score >= 3.0 %}
+                    <div class="good-review-score col-sm-1">
+                {% else %}
+                    <div class="bad-review-score col-sm-1">
+                {% endif %}
+                {{'%0.1f' | format(review.score)}}
+                </div>
 
+                <p class="reviewer-name col-sm-2">{{ review.display_name }}</p>
+                <p class="col-sm-11 col-sm-offset-1">{{shorten(review.review, 140)}}</p>
+            </article>
+        {% endfor %}
+    </div>
     <div class="col-sm-6 review-scroll top-margin-please">
         {% for review in reviews %}
-            <div class=>
+            <article class="row">
+                {% if review.score >= 3.0 %}
+                    <div class="good-review-score col-sm-1">
+                {% else %}
+                    <div class="bad-review-score col-sm-1">
+                {% endif %}
                 {{'%0.1f' | format(review.score)}}
-                <p>Reviewer Placeholder Name</p>
-                {{ review.summary }}
-            </div>
+                </div>
+
+                <p class="reviewer-name col-sm-2">{{ review.display_name }}</p>
+                <p class="col-sm-11 col-sm-offset-1">{{shorten(review.review, 140)}}</p>
+            </article>
         {% endfor %}
     </div>
 {% endblock %}

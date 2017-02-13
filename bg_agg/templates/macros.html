@@ -14,6 +14,10 @@
     {% endfor %}
 {% endmacro %}
 
-{% macro shorten(val) %}
-    {{val[0:1500]|safe}}
+{% macro shorten(text,val) %}
+    {% if text|length > val %}
+        {{text[0:val]|safe}}...
+    {% else %}
+        {{text|safe}}
+    {% endif %}
 {% endmacro %}
