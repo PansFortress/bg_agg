@@ -22,8 +22,7 @@ def game_get(game_id):
 
     reviews = session.query(Review).filter(Review.product == product)
 
-    # result = session.query(Review, Reviewer).filter(Review.product==product).\
-    #          filter_by(Review.reviewer_id == Reviewer.id)
+    # result = session.query(Review, Reviewer).filter(Review.product==product).join(Review.reviewer_id == Reviewer.id)
 
     # for item in result:
     #     print(item)
