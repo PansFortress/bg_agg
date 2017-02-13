@@ -73,7 +73,8 @@ def createProducts(root):
             session.add(product)
             session.commit()
 
-#TODO: Make a function to check for first instance of a key in the tree
+#TODO: Make a function to check for first instance of a key in the tree while also
+# giving the ability to filter
 def populateProduct(product, root):
     for item in root.iter('description'):
         product.description = item.text

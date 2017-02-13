@@ -71,7 +71,7 @@ def form_post(game_id):
 
     flash("Your review's been submitted. Thanks so much!", "success")
 
-    return(redirect(url_for("get_game", game_id=product.id)))
+    return(redirect(url_for("game_get", game_id=product.id)))
 
 
 @app.route("/login", methods=["GET"])
