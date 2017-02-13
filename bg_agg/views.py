@@ -53,8 +53,6 @@ def form_get(game_id):
         return render_template("review_form.html", product=product)
     return render_template("404.html"),404
 
-# Question: Is there any way to pass product from the GET request back to the
-# POST request so we don't have to make a second query to the db?
 @app.route("/game/<int:game_id>/form", methods=["POST"])
 @login_required
 def form_post(game_id):
@@ -73,7 +71,7 @@ def form_post(game_id):
 
     flash("Your review's been submitted. Thanks so much!", "success")
 
-    return(redirect(url_for("default")))
+    return(redirect(url_for("get_game", game_id=product.id)))
 
 
 @app.route("/login", methods=["GET"])
