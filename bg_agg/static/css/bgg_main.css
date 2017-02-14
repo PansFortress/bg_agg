@@ -26,7 +26,7 @@
 }
 
 .review-scroll{
-    height: 900px;
+    max-height: 900px;
     overflow-x: scroll;
 }
 
