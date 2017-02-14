@@ -7,17 +7,30 @@ from .database import Base, engine, session
 
 @app.route("/")
 def default():
-    return render_template("product_mockup.html")
+    Review = models.Review
+    rev = session.query(Review.product_id, func.avg(Review.score).label('avg')).\
+                  group_by(Review.product_id).subquery()
+
+    Product = models.Product
+    products = session.query(Product).join(rev).order_by(rev.c.avg.desc()).values(
+               Product.id,
+               Product.name,
+               Product.publisher,
+               Product.release,
+               Product.player_num,
+               Product.image,
+               Product.description,
+               rev.c.avg)
+
+    return render_template("product_summary.html", products=products)
 
 @app.route("/game/<int:game_id>", methods=["GET"])
 def game_get(game_id):
+    Review = models.Review
+    Reviewer = models.Reviewer    
     Product = models.Product
     product = session.query(Product).filter(Product.id==game_id).first()
 
-    # TODO Need to investigate how to 1) Use SQLAlchemy to SUM a column up
-    # 2) join on Reviewers who are Critics
-    Review = models.Review
-    Reviewer = models.Reviewer
 
     critic_reviews = session.query(Review).join(Review.reviewer).\
              filter(Review.product == product).\

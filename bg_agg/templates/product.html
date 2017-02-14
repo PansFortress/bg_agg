@@ -63,7 +63,7 @@
                 {{'%0.1f' | format(review.score)}}
                 </div>
 
-                <p class="reviewer-name col-sm-2">{{ review.display_name }}</p>
+                <p class="name col-sm-2">{{ review.display_name }}</p>
                 <p class="col-sm-11 col-sm-offset-1">{{shorten(review.review, 140)}}</p>
             </article>
         {% endfor %}
@@ -79,7 +79,7 @@
                 {{'%0.1f' | format(review.score)}}
                 </div>
 
-                <p class="reviewer-name col-sm-6">{{ review.display_name }}</p>
+                <p class="name col-sm-6">{{ review.display_name }}</p>
                 <p class="col-sm-11 col-sm-offset-1">{{shorten(review.review, 140)}}</p>
             </article>
         {% endfor %}

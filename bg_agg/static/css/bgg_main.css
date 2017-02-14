@@ -4,7 +4,11 @@
 }
 
 .top-margin-please{
-    margin-top: 10px;
+    margin-top: 15px;
+}
+
+.left-margin-please{
+    margin-left: 15px;
 }
 
 .good-review-score{
@@ -13,7 +17,7 @@
     text-align: center;
     width: 50px;
     height: 30px;
-    line-height: 30px;
+    line-height: 30px
 }
 
 .bad-review-score{
@@ -30,6 +34,6 @@
     overflow-x: scroll;
 }
 
-.reviewer-name{
+.name{
     font-weight: bold;
 }
