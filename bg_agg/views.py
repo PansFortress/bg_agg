@@ -98,5 +98,9 @@ def login_post():
     login_user(user)
     return redirect(request.args.get('next') or url_for("form_get", game_id=1))
 
+@app.route("/amazon/<product_name>", methods=["GET"])
+def amazon_get(product_name):
+    return redirect("https://www.amazon.com/gp/search?ie=UTF8&tag=jpanlearning-20&linkCode=ur2&linkId=a2aacfee5a1d16446bcacecdef3b9966&camp=1789&creative=9325&index=aps&keywords={}".format(product_name), code=302)
+
 # TODO: OATH
 # TODO: Password reset, email notification, whole infrastructure
