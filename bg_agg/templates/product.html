@@ -14,7 +14,7 @@
     <div class="col-sm-2">
         <p><b>First Release: </b>{{ product.release }}</p>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <p><b>Number of Players: </b>{{ product.player_num }}</p>
     </div>
 </div>
@@ -26,13 +26,21 @@
     <div class="col-sm-3">
         <div class="rating-block">
             <h4>Average Critic Rating</h4>
-            {{ review_stars(4|float)}}
+            {% if critic_avg %}
+                {{ review_stars(critic_avg|float)}}
+            {% else %}
+                {{ review_stars(0|float)}}
+            {% endif %}
         </div>
     </div>
     <div class="col-sm-3">
         <div class="rating-block">
             <h4>Average User Rating</h4>
-            {{ review_stars(2.0|float)}}
+            {% if non_critic_avg %}
+                {{ review_stars(non_critic_avg|float)}}
+            {% else %}
+                {{ review_stars(0|float)}}
+            {% endif %}
         </div>
     </div>
 {#     <div class="col-sm-3">

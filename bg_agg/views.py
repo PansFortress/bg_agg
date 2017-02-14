@@ -39,9 +39,15 @@ def game_get(game_id):
                     Review.review,
                     Review.source)
 
+    critic_avg = session.query(func.avg(Review.score)).join(Review.reviewer).\
+                 filter(Reviewer.critic == True).filter(Review.product == product).first()[0]
+    non_critic_avg = session.query(func.avg(Review.score)).join(Review.reviewer).\
+                 filter(Reviewer.critic == False).filter(Review.product == product).first()[0]
+
     if product:
         return render_template("product.html", product=product, 
-                                critic_reviews=critic_reviews,reviews=reviews)
+                                critic_reviews=critic_reviews,reviews=reviews,
+                                critic_avg=critic_avg, non_critic_avg=non_critic_avg)
     return render_template("404.html"),404
 
 @app.route("/game/<int:game_id>/form", methods=["GET"])
