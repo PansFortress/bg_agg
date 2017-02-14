@@ -8,10 +8,12 @@ from .database import Base, engine, session
 @app.route("/")
 def default():
     Review = models.Review
+    # Create a subquery of product_id and their avg score
     rev = session.query(Review.product_id, func.avg(Review.score).label('avg')).\
                   group_by(Review.product_id).subquery()
 
     Product = models.Product
+    # Get product information and avg after joining on subquery rev
     products = session.query(Product).join(rev).order_by(rev.c.avg.desc()).values(
                Product.id,
                Product.name,
