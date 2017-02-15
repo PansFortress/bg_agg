@@ -59,4 +59,8 @@
         height: 90px;
         line-height: 90px
     }
+
+    .small{
+        font-size: 100%
+    }
 }
