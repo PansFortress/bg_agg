@@ -37,3 +37,9 @@
 .name{
     font-weight: bold;
 }
+
+@media all and (max-width: 1000px) { /* screen size until 1000px */
+    body {
+        font-size: 1.75em; /* 1.2x default size */
+        }
+    }
