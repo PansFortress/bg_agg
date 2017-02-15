@@ -39,7 +39,7 @@
 
 @media (max-width: 1000px) { /* screen size until 1000px */
     body {
-        font-size: 2em; /* 2x default size */
+        font-size: 3em; /* 2x default size */
         }
     .good-review-score{
         background-color:#66CC33;
