@@ -28,7 +28,6 @@
     height: 30px;
     line-height: 30px;
 }
-
 .review-scroll{
     max-height: 900px;
     overflow-x: scroll;
@@ -36,4 +35,32 @@
 
 .name{
     font-weight: bold;
+}
+
+@media (max-width: 1000px) { /* screen size until 1000px */
+    body {
+        font-size: 3em; /* 2x default size */
+        }
+    .good-review-score{
+        background-color:#66CC33;
+        color:white;
+        font-size: 3em;
+        text-align: center;
+        width: 50%;
+        height: 90px;
+        line-height: 90px
+    }
+    .bad-review-score{
+        background-color:#B5543F;
+        color:white;
+        font-size: 3em;
+        text-align: center;
+        width: 50%;
+        height: 90px;
+        line-height: 90px
+    }
+
+    .small{
+        font-size: 100%
+    }
 }
