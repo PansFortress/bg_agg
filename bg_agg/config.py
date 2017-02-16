@@ -1,7 +1,7 @@
 import os
 
 class DevelopmentConfig(object):
-    DATABASE_URI = "postgres://unszlllddfwith:cfd28d506d106f8f4986e75fa6ade194defe8cf17dd307e367a0fc7f739e60d9@ec2-174-129-37-15.compute-1.amazonaws.com:5432/dfuusin4kespkh"
+    DATABASE_URI = os.environ.get("DATABASE_URL", "postgresql:///bg_agg")
     DEBUG = True
     SECRET_KEY = os.environ.get("SECRET_KEY", os.urandom(12))
 
