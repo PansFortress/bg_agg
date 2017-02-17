@@ -1,6 +1,7 @@
 import os, requests
 import xml.etree.ElementTree as ET
 import time
+from faker import Faker
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from werkzeug.security import generate_password_hash
@@ -10,6 +11,7 @@ from bg_agg.models import Review, Product, Reviewer
 
 # TODO: Need to add logging to the seeding process to confirm where we fail
 
+fake = Faker()
 manager = Manager(app)
 
 @manager.command
@@ -140,6 +142,46 @@ def seedImages():
     for product in products:
         product.image = "http://tincan.co.uk/sites/default/files/banners/tc-404.jpg"
     session.commit()
+
+@manager.command
+def seedCriticReviews():
+    products = session.query(Product).all()
+    shutupandsitdown = session.query(Reviewer).filter(Reviewer.display_name == "shutupandsitdown").first()
+    dicetowerreviews = session.query(Reviewer).filter(Reviewer.display_name == "dicetowerreviews").first()
+    eightoclock = session.query(Reviewer).filter(Reviewer.display_name == "eightoclock").first()
+    negativenate = session.query(Reviewer).filter(Reviewer.display_name == "negativenate").first()
+
+    for product in products:
+        review10 = Review(raw_score=10,
+                                score=tenToScore(10),
+                                summary="This was an amazing game, never forget {}".format(fake.sentences(nb=1)[0]),
+                                review="This was an amazing game, never forget {}".format(fake.sentences(nb=1)[0]),
+                                product=product,
+                                reviewer=shutupandsitdown)
+
+        review8 = Review(raw_score=8,
+                                score=tenToScore(8),
+                                summary="This was a great amazing game, could be better {}".format(fake.sentences(nb=1)[0]),
+                                review="This was a somewhat an amazing game, could be better {}".format(fake.sentences(nb=1)[0]),
+                                product=product,
+                                reviewer=eightoclock)
+
+        review5 = Review(raw_score=5,
+                                score=tenToScore(5),
+                                summary="This was a somewhat disappointing game, could be better {}".format(fake.sentences(nb=1)[0]),
+                                review="This was a somewhat disappointing game, could be better {}".format(fake.sentences(nb=1)[0]),
+                                product=product,
+                                reviewer=dicetowerreviews)
+
+        review1 = Review(raw_score=1,
+                                score=tenToScore(1),
+                                summary="This was a terrible game, do not purchase {}".format(fake.sentences(nb=1)[0]),
+                                review="This was a terrible game, do not purchase {}".format(fake.sentences(nb=1)[0]),
+                                product=product,
+                                reviewer=negativenate)
+
+        session.add_all([review10, review5, review1])
+        session.commit()
 
 def tenToScore(val):
     return float(val)/2
