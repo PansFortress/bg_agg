@@ -22,6 +22,16 @@ def addreviewer():
     session.add(reviewer)
     session.commit()
     
+def createProducts(root):
+    for item in root.iter('item'):
+        product = session.query(Product).filter(Product.e_id == item.attrib["id"]).first()
+        # Blacklist 193738 due to encoding issues with XML data back. BGG API sent back
+        # 200 status_code while reporting an error in messaging for this
+        if not product and item.attrib["id"] != "193738":
+            product = Product(e_id = item.attrib["id"])
+            session.add(product)
+            session.commit()
+
 @manager.command
 def gettopfifty():
     try:
@@ -35,43 +45,6 @@ def gettopfifty():
     
     except requests.exceptions.RequestException as e:
         return "Error: {}".format(e)
-
-@manager.command
-def seedmissing():
-    products = session.query(Product).filter(Product.description == None).all()
-    for product in products:
-        try:
-            time.sleep(1)
-            r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(product.e_id))
-            if not r.status_code == 200:
-                return "Error: Unexected response with {}".format(r)
-
-            root = ET.fromstring(r.text)
-            populateProduct(product, root)
-            populateReviews(product, root)
-
-        except requests.exceptions.RequestException as e:
-            print("Sleeping for 60 seconds due to {}".format(e))
-            time.sleep(60)
-        except ET.ParseError:
-            print("{} is corrupt".format(r.text))
-
-@manager.command
-def seedPasswords(defaultPassword):
-    users = session.query(Reviewer).filter(Reviewer.password == '').all()
-    for user in users:
-        user.password = generate_password_hash(defaultPassword)
-    session.commit()
-
-def createProducts(root):
-    for item in root.iter('item'):
-        product = session.query(Product).filter(Product.e_id == item.attrib["id"]).first()
-        # Blacklist 193738 due to encoding issues with XML data back. BGG API sent back
-        # 200 status_code while reporting an error in messaging for this
-        if not product and item.attrib["id"] != "193738":
-            product = Product(e_id = item.attrib["id"])
-            session.add(product)
-            session.commit()
 
 #TODO: Make a function to check for first instance of a key in the tree while also
 # giving the ability to filter
@@ -104,9 +77,6 @@ def populateProduct(product, root):
     
     session.commit()
 
-def tenToScore(val):
-    return float(val)/2
-
 def populateReviews(product, root):
     for item in root.iter('comment'):
         if item.attrib["rating"] != "N/A":
@@ -137,6 +107,42 @@ def getUser(username):
     session.commit()
     return user
 
+@manager.command
+def seedmissing():
+    products = session.query(Product).filter(Product.description == None).all()
+    for product in products:
+        try:
+            time.sleep(1)
+            r = requests.get("https://www.videogamegeek.com/xmlapi2/thing?id={}&comments=1".format(product.e_id))
+            if not r.status_code == 200:
+                return "Error: Unexected response with {}".format(r)
+
+            root = ET.fromstring(r.text)
+            populateProduct(product, root)
+            populateReviews(product, root)
+
+        except requests.exceptions.RequestException as e:
+            print("Sleeping for 60 seconds due to {}".format(e))
+            time.sleep(60)
+        except ET.ParseError:
+            print("{} is corrupt".format(r.text))
+
+@manager.command
+def seedPasswords(defaultPassword):
+    users = session.query(Reviewer).filter(Reviewer.password == '').all()
+    for user in users:
+        user.password = generate_password_hash(defaultPassword)
+    session.commit()
+
+@manager.command
+def seedImages():
+    products = session.query(Product).filter(Product.image == None).all()
+    for product in products:
+        product.image = "http://tincan.co.uk/sites/default/files/banners/tc-404.jpg"
+    session.commit()
+
+def tenToScore(val):
+    return float(val)/2
 
 def textToScore(val):
     if val == "buy":
