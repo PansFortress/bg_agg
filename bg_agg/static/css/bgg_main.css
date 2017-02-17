@@ -31,6 +31,7 @@
 .review-scroll{
     max-height: 900px;
     overflow-x: scroll;
+    overflow-y: hidden;
 }
 
 .name{
@@ -42,19 +43,11 @@
         font-size: 3em; /* 2x default size */
         }
     .good-review-score{
-        background-color:#66CC33;
-        color:white;
-        font-size: 3em;
-        text-align: center;
         width: 50%;
         height: 90px;
         line-height: 90px
     }
     .bad-review-score{
-        background-color:#B5543F;
-        color:white;
-        font-size: 3em;
-        text-align: center;
         width: 50%;
         height: 90px;
         line-height: 90px
@@ -62,5 +55,10 @@
 
     .small{
         font-size: 100%
+    }
+
+    .review-scroll{
+        overflow-x: hidden;
+        overflow-y: hidden;
     }
 }
