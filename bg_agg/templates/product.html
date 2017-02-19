@@ -1,90 +1,87 @@
 {% extends "base.html" %}
 {% from "macros.html" import review_stars, shorten %}
 {% block content %}
-<div class="row">
-   <div class="col-md-6">
-      <h3>{{ product.name }}</h3>
-   </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        <p><b>Publisher: </b>{{ product.publisher }}</p>
-    </div>
-    <div class="col-md-2">
-        <p><b>First Release: </b>{{ product.release }}</p>
-    </div>
-    <div class="col-md-3">
-        <p><b>Number of Players: </b>{{ product.player_num }}</p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        <img src="{{ product.image }}">
-    </div>
-    <div class="col-md-3">
-        <div class="rating-block">
-            <h4>Average Critic Rating</h4>
-            {% if critic_avg %}
-                {{ review_stars(critic_avg|float)}}
-            {% else %}
-                {{ review_stars(0|float)}}
-            {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <h3>{{ product.name }}</h3>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="rating-block">
-            <h4>Average User Rating</h4>
-            {% if non_critic_avg %}
-                {{ review_stars(non_critic_avg|float)}}
-            {% else %}
-                {{ review_stars(0|float)}}
-            {% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            <p><b>Publisher: </b>{{ product.publisher }}</p>
+        </div>
+        <div class="col-md-2">
+            <p><b>First Release: </b>{{ product.release }}</p>
+        </div>
+        <div class="col-md-3">
+            <p><b>Number of Players: </b>{{ product.player_num }}</p>
         </div>
     </div>
-    <div class="col-md-3">
-        <a href="{{url_for('amazon_get', product_name = product.name)}}" class="btn btn-success btn-lg top-margin-please">Buy the Game </a>
-        <a href="{{url_for('form_get', game_id=product.id)}}" class="btn btn-info btn-lg top-margin-please">Write a Review</a>
-    </div>
-    <div class="col-md-9">
-        <p class="small top-margin-please"><b>Summary: </b>{{shorten(product.description, 1500)}}</p>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6 review-scroll top-margin-please">
-        {% for review in critic_reviews[:10] %}
-            <article class="row">
-                {% if review.score >= 3.0 %}
-                    <div class="good-review-score col-md-1">
-                {% else %}
-                    <div class="bad-review-score col-md-1">
-                {% endif %}
-                {{'%0.1f' | format(review.score)}}
+    <div class="row">
+        <div class="col-md-3">
+            <img src="{{ product.image }}">
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="rating-block">
+                    <h4>Average Critic Rating</h4>
+                    {% if critic_avg %}
+                        {{ review_stars(critic_avg|float)}}
+                    {% else %}
+                        {{ review_stars(0|float)}}
+                    {% endif %}
                 </div>
-
-                <p class="name col-md-2">{{ review.display_name }}</p>
-                <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
-            </article>
-        {% endfor %}
-    </div>
-    <div class="col-md-6 review-scroll top-margin-please">
-        {% for review in reviews[:10]%}
-            <article class="row">
-                {% if review.score >= 3.0 %}
-                    <div class="good-review-score col-md-1">
-                {% else %}
-                    <div class="bad-review-score col-md-1">
-                {% endif %}
-                {{'%0.1f' | format(review.score)}}
+            </div>
+            <div class="col-md-3">
+                <div class="rating-block">
+                    <h4>Average User Rating</h4>
+                    {% if non_critic_avg %}
+                        {{ review_stars(non_critic_avg|float)}}
+                    {% else %}
+                        {{ review_stars(0|float)}}
+                    {% endif %}
                 </div>
-
-                <p class="name col-md-6">{{ review.display_name }}</p>
-                <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
-            </article>
-        {% endfor %}
-        <!--TODO: Check for length of review, if greater than 10, allow option to expand-->
+            </div>
+            <div class="col-md-3">
+                <a href="{{url_for('amazon_get', product_name = product.name)}}" class="btn btn-success btn-lg top-margin-please">Buy the Game </a>
+                <a href="{{url_for('form_get', game_id=product.id)}}" class="btn btn-info btn-lg top-margin-please">Write a Review</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p class="small top-margin-please float-right"><b>Summary: </b>{{shorten(product.description, 1500)}}</p>
+        </div>
     </div>
-</div>
-{% endblock %}
+    <div class="row">
+        <div class="col-md-6 review-scroll top-margin-please">
+            {% for review in critic_reviews[:10] %}
+                <article class="row">
+                    {% if review.score >= 3.0 %}
+                        <div class="good-review-score col-md-1">
+                        {% else %}
+                            <div class="bad-review-score col-md-1">
+                            {% endif %}
+                            {{'%0.1f' | format(review.score)}}
+                        </div>
+                        <p class="name col-md-2">{{ review.display_name }}</p>
+                        <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
+                    </article>
+                {% endfor %}
+            </div>
+            <div class="col-md-6 review-scroll top-margin-please">
+                {% for review in reviews[:10]%}
+                    <article class="row">
+                        {% if review.score >= 3.0 %}
+                            <div class="good-review-score col-md-1">
+                            {% else %}
+                                <div class="bad-review-score col-md-1">
+                                {% endif %}
+                                {{'%0.1f' | format(review.score)}}
+                            </div>
+                            <p class="name col-md-6">{{ review.display_name }}</p>
+                            <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
+                        </article>
+                    {% endfor %}
+                    <!--TODO: Check for length of review, if greater than 10, allow option to expand-->
+                </div>
+            </div>
+        {% endblock %}
