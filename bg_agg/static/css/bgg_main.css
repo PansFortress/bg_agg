@@ -1,3 +1,7 @@
+img{
+    width: 100%;
+}
+
 .thumbnail{
     border: 0 none;
     box-shadow: none;
@@ -32,10 +36,10 @@
 .name{
     font-weight: bold;
 }
-
-@media (max-width: 1000px) { /* screen size until 1000px */
+/*
+@media (max-width: 1000px) { 
     body {
-        font-size: 3em; /* 2x default size */
+        font-size: 3em; 
         }
     .good-review-score{
         width: 50%;
@@ -56,4 +60,4 @@
         overflow-x: hidden;
         overflow-y: hidden;
     }
-}
+}*/
