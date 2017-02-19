@@ -34,7 +34,7 @@ def game_get(game_id):
     product = session.query(Product).filter(Product.id==game_id).first()
 
 
-    critic_reviews = session.query(Review).join(Review.reviewer).\
+    critic_reviews = list(session.query(Review).join(Review.reviewer).\
              filter(Review.product == product).\
              filter(Reviewer.critic == True).\
              values(Reviewer.critic,
@@ -42,9 +42,9 @@ def game_get(game_id):
                     Review.raw_score,
                     Review.score,
                     Review.review,
-                    Review.source)
+                    Review.source))
 
-    reviews = session.query(Review).join(Review.reviewer).\
+    reviews = list(session.query(Review).join(Review.reviewer).\
              filter(Review.product == product).\
              filter(Reviewer.critic == False).\
              values(Reviewer.critic,
@@ -52,7 +52,7 @@ def game_get(game_id):
                     Review.raw_score,
                     Review.score,
                     Review.review,
-                    Review.source)
+                    Review.source))
 
     critic_avg = session.query(func.avg(Review.score)).join(Review.reviewer).\
                  filter(Reviewer.critic == True).filter(Review.product == product).first()[0]

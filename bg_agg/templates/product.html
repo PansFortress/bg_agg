@@ -51,9 +51,10 @@
         <p class="small top-margin-please"><b>Summary: </b>{{shorten(product.description, 1500)}}</p>
     </div>
 </div>
-    
+
+<div class="row">
     <div class="col-md-6 review-scroll top-margin-please">
-        {% for review in critic_reviews %}
+        {% for review in critic_reviews[:10] %}
             <article class="row">
                 {% if review.score >= 3.0 %}
                     <div class="good-review-score col-md-1">
@@ -69,7 +70,7 @@
         {% endfor %}
     </div>
     <div class="col-md-6 review-scroll top-margin-please">
-        {% for review in reviews %}
+        {% for review in reviews[:10]%}
             <article class="row">
                 {% if review.score >= 3.0 %}
                     <div class="good-review-score col-md-1">
@@ -83,5 +84,7 @@
                 <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
             </article>
         {% endfor %}
+        <!--TODO: Check for length of review, if greater than 10, allow option to expand-->
     </div>
+</div>
 {% endblock %}
