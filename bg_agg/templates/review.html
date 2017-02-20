@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-horizontal">
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Game</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{review.name}}</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Summary</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{review.summary}}</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Review</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{review.review}}</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-2 control-label">Rating</label>
+        <div class="col-md-10">
+            <p class="form-control-static">{{review.score}} / 5.0</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

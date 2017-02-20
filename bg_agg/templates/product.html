@@ -79,9 +79,12 @@
                 {% endif %}
                 {{'%0.1f' | format(review.score)}}
                 </div>
-
                 <p class="name col-md-6">{{ review.display_name }}</p>
-                <p class="col-md-11 col-md-offset-1">{{shorten(review.review, 140)}}</p>
+                <p class="col-md-11 col-md-offset-1">
+                <a href="{{url_for('review_get', review_id = review.id)}}">
+                {{shorten(review.review, 140)}}
+                </p>
+                </a>
             </article>
         {% endfor %}
         <!--TODO: Check for length of review, if greater than 10, allow option to expand-->

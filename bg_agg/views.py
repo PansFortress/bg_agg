@@ -26,6 +26,20 @@ def default():
 
     return render_template("product_summary.html", products=products)
 
+@app.route("/game/review/<int:review_id>", methods=["GET"])
+def review_get(review_id):
+    Review = models.Review
+    Product = models.Product
+    review = list(session.query(Review).join(Review.product).\
+             filter(Review.id==review_id).\
+             values(Product.name,
+                    Review.score,
+                    Review.review,
+                    Review.summary))
+
+    review = review[0]
+    return render_template("review.html", review=review)
+
 @app.route("/game/<int:game_id>", methods=["GET"])
 def game_get(game_id):
     Review = models.Review
@@ -39,6 +53,7 @@ def game_get(game_id):
              filter(Reviewer.critic == True).\
              values(Reviewer.critic,
                     Reviewer.display_name,
+                    Review.id,
                     Review.raw_score,
                     Review.score,
                     Review.review,
@@ -49,6 +64,7 @@ def game_get(game_id):
              filter(Reviewer.critic == False).\
              values(Reviewer.critic,
                     Reviewer.display_name,
+                    Review.id,
                     Review.raw_score,
                     Review.score,
                     Review.review,
